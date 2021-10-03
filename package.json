@@ -1,5 +1,5 @@
 {
-  "name": "@ryanke/template",
+  "name": "@ryanke/spider",
   "version": "0.0.1",
   "repository": "https://github.com/sylv/template.git",
   "author": "Ryan <ryan@sylver.me>",
@@ -39,5 +39,12 @@
     "nodemon": "^2.0.12",
     "tsup": "^4.12.5",
     "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "chrono-node": "^2.3.2",
+    "compromise": "^13.11.4",
+    "compromise-numbers": "^1.4.0",
+    "undici": "^4.7.0"
   }
 }
