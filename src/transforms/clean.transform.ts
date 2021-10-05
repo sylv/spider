@@ -9,8 +9,8 @@ export const transformClean = createTransformer({
         // Fix sentences with no space in between
         // "birds are.government drones" > "birds are. government drones"
         .replace(/\.([A-Z])/g, ". $1")
-        // remove double new lines
-        // "an example\n\n\n\n\n" > "an example\n"
+        // remove spaces after new lines
+        // "an example\n    test" > "an example\ntest"
         .replace(/\r?\n( +)/g, "\n")
         .trim()
     );

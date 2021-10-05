@@ -4,8 +4,8 @@ it("should remove double spaces", () => {
   expect(transformClean("test  here")).toBe("test here");
 });
 
-it("should remove double new lines", () => {
-  expect(transformClean("test\n\nhere")).toBe("test\nhere");
+it("should remove spaces after a new line", () => {
+  expect(transformClean("test\n   here")).toBe("test\nhere");
 });
 
 it("should fix sentences with no space after the period", () => {

@@ -13,18 +13,37 @@ const url = "https://news.ycombinator.com/item?id=28730908";
 
 // the syntax is basically the same as jquery
 // "@href" = return "href" attribute
-const result = await scrape(url, {
-  title: "a.storylink",
-  url: "a.storylink@href",
-  points: t.number("td.subtext span.score"),
-  age: t.duration("td.subtext span.age"),
+const result = await scrape("https://blog.ycombinator.com/", {
+  posts: [
+    ".post",
+    {
+      title: "h1 a",
+      url: "h1 a@href",
+      summary: ".loop-post-text p",
+      categories: [
+        ".post-categories li a",
+        {
+          name: "",
+          url: "@href",
+        },
+      ],
+      authors: [
+        ".loop-meta-author a",
+        {
+          name: "",
+          link: "@href",
+        },
+      ],
+      createdAt: t.date(".post-date"),
+    },
+  ],
 });
 
 console.log(result);
 
 // the return type is based on the schema
-console.log(result.title); // string | undefined
-console.log(result.points); // number | undefined
+console.log(result[0].title); // string | undefined
+console.log(result[0].createdAt); // Date | undefined
 ```
 
 ### html input
@@ -32,7 +51,7 @@ console.log(result.points); // number | undefined
 ```ts
 const html = '<h1 class="title">Panda</h1>';
 const result = await scrape(html, { title: ".title" });
-console.log(result.title); // "Panda", string | undefined
+console.log(result.title);
 ```
 
 ### custom transformers
