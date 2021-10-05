@@ -42,8 +42,8 @@ const result = await scrape("https://blog.ycombinator.com/", {
 console.log(result);
 
 // the return type is based on the schema
-console.log(result[0].title); // string | undefined
-console.log(result[0].createdAt); // Date | undefined
+console.log(result.posts[0].title); // string | undefined
+console.log(result.posts[0].createdAt); // Date | undefined
 ```
 
 ### html input
