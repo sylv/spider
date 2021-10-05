@@ -2,22 +2,33 @@ import { t } from ".";
 import { scrape } from "./scrape";
 
 async function main(): Promise<any> {
-  const result = await scrape("https://news.ycombinator.com/item?id=28730908", {
-    title: "a.storylink",
-    url: "a.storylink@href",
-    points: t.number("td.subtext span.score"),
-    age: t.duration("td.subtext span.age"),
-    // comments: [
-    //   ".athing comtr",
-    //   {
-    //     user: ".comhead a.hnuser",
-    //     age: t.duration(".comhead span.age"),
-    //     content: ".comment",
-    //   },
-    // ],
+  const result = await scrape("https://blog.ycombinator.com/", {
+    posts: [
+      ".post",
+      {
+        title: "h1 a",
+        url: "h1 a@href",
+        summary: ".loop-post-text p",
+        categories: [
+          ".post-categories li a",
+          {
+            name: "",
+            url: "@href",
+          },
+        ],
+        authors: [
+          ".loop-meta-author a",
+          {
+            name: "",
+            link: "@href",
+          },
+        ],
+        createdAt: t.date(".post-date"),
+      },
+    ],
   });
 
-  console.log(result);
+  console.dir(result, { depth: null });
 }
 
 main();

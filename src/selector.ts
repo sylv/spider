@@ -1,9 +1,39 @@
-import { CheerioAPI } from "cheerio";
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+import { Cheerio, CheerioAPI } from "cheerio";
 
-export const selector = (filter: string, $: CheerioAPI): string | undefined => {
+const value = (item: Cheerio<any>, attribute?: string): string | undefined => {
+  if (attribute) {
+    switch (attribute) {
+      case "html":
+        return item.html() || undefined;
+      default:
+        return item.attr(attribute);
+    }
+  }
+
+  return item.text();
+};
+
+export const selector = ($: CheerioAPI, filter: string, context?: Cheerio<any>): string | undefined => {
   const [selector, attribute] = filter.split("@");
-  const result = $(selector);
+  if (!selector) {
+    // allows for empty selectors for things like arrays where its ".title a" then
+    // you want to get the href of each title, you can do "@href"
+    if (context) return value(context, attribute);
+    return;
+  }
+
+  const result = $(selector, context);
   if (result.length === 0) return;
-  if (attribute) return result.attr(attribute);
-  return result.text();
+  const first = result.first();
+  if (attribute) {
+    switch (attribute) {
+      case "html":
+        return first.html() || undefined;
+      default:
+        return first.attr(attribute);
+    }
+  }
+
+  return first.text();
 };
