@@ -102,9 +102,11 @@ Sometimes, you need to check multiple selectors to find the correct value. You c
 
 There is no built-in support for headless browsers, but you can use [puppeteer](https://github.com/puppeteer/puppeteer) or [playwright](https://playwright.dev/) to scrape pages that require javascript. Wait for the page to be ready, grab the html and use `schema.parse(html)`.
 
-### custom extraction
+### custom extraction functions
 
-Sometimes sites are stubborn and have data in a format you can't easily parse using just selectors. For this, in place of selectors you can use a function which is passed the cheerio object and, for arrays, the element that is being processed. This function can return any value, and can do whatever necessary to grab data.
+Sometimes sites are stubborn and have data in a format you can't easily parse using just selectors. For this, in place of selectors you can use a function which is passed the cheerio object and, for arrays, the element that is being processed. This function can return any value, and can do whatever necessary to grab data
+
+If a custom extraction function returns an array, all results from each iteration will be flattened into a single array.
 
 ```ts
 const mySchema = createSchema({
@@ -127,4 +129,7 @@ const mySchema = createSchema({
 ## todo
 
 - Allow loading preloaded cheerio objects, may be useful in combination with [crawlee](https://crawlee.dev/api/cheerio-crawler).
-- Create a schema automatically based on the structure of the page. For example, on startup provide two URLs with known values like the title, then generate selectors and reuse them for unknown pages. This would work on sites that change classes often.
+- Generate a schema by having the user pick out some values from a page, then grabbing the HTML and generating selectors for the values.
+  - Could be nice for small scripts and quickly getting started.
+  - Allow multiple examples as tests to make sure the generated selectors are correct
+  - Ideally, the example objects would be exactly like a schema object, arrays and all, and we could use some magic to convert it to an actual schema.

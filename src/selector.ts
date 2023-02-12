@@ -100,12 +100,6 @@ export const parseSchema = <T extends SchemaLike>(
               items.push(filtered);
             }
           }
-        } else if (typeof childSchema === "function") {
-          for (const el of $(rawSelector)) {
-            const output = childSchema($, $(el), { selector, url });
-            result[key] = output;
-            break;
-          }
         } else {
           const [selector, ...siblings] = rawSelector.split(/ ~ /g);
           for (let el of $(selector)) {
@@ -121,8 +115,17 @@ export const parseSchema = <T extends SchemaLike>(
               }
             }
 
-            const result = parseSchema($, childSchema, url, el);
-            items.push(result);
+            if (typeof childSchema === "function") {
+              const result = childSchema($, $(el), { url });
+              if (Array.isArray(result)) {
+                items.push(...result);
+              } else {
+                items.push(result);
+              }
+            } else {
+              const result = parseSchema($, childSchema, url, el);
+              items.push(result);
+            }
           }
         }
 
