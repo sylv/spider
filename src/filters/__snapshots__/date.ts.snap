@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`should parse valid date strings 1`] = `2022-01-01T04:00:00.000Z`;
+
+exports[`should parse valid date strings 2`] = `2022-02-01T00:00:00.000Z`;
+
+exports[`should parse valid date strings 3`] = `2021-12-21T04:00:00.000Z`;
+
+exports[`should parse valid date strings 4`] = `2023-12-21T04:00:00.000Z`;

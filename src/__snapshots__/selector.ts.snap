@@ -1,0 +1,22 @@
+// Vitest Snapshot v1
+
+exports[`should parse multiple selectors 1`] = `
+[
+  {
+    "attrName": "href",
+    "filters": [
+      "optional",
+    ],
+    "name": "a:contains(comment)",
+    "raw": "a:contains(comment)@href | optional",
+  },
+  {
+    "attrName": "href",
+    "filters": [
+      "optional",
+    ],
+    "name": "a:contains(discuss)",
+    "raw": "a:contains(discuss)@href | optional",
+  },
+]
+`;

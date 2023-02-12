@@ -1,13 +1,36 @@
 {
+  "include": ["src", "types"],
   "compilerOptions": {
-    "lib": ["es2020"],
-    "module": "commonjs",
-    "target": "es2020",
+    // https://www.npmjs.com/package/@tsconfig/node16
+    // https://github.com/sindresorhus/tsconfig/blob/main/tsconfig.json
+    "module": "node16",
+    "moduleResolution": "node16",
+    "moduleDetection": "force",
+    "target": "es2021", // node 16
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "pretty": true,
+    "newLine": "lf",
+    "stripInternal": true,
     "strict": true,
+    "noImplicitOverride": false,
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmitOnError": true,
     "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "importsNotUsedAsValues": "error",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "outDir": "dist",
+    "noUncheckedIndexedAccess": false,
+    "strictPropertyInitialization": false,
+    "lib": ["es2021", "dom"],
+    "baseUrl": ".",
+    "types": ["vitest/importMeta"],
+    "paths": {
+      "compromise": ["node_modules/compromise/types/three.d.ts"]
+    }
   }
 }
