@@ -11,6 +11,7 @@ export type PaginationFunc<T extends SchemaLike> = ($: CheerioAPI, result: ToSch
 
 export interface SchemaOptions {
   getHeaders?: () => Record<string, string>;
+  getHTML?: (url: string) => Promise<string>;
 }
 
 export class Schema<T extends SchemaLike> {
@@ -120,8 +121,17 @@ export class Schema<T extends SchemaLike> {
         throw new QueueFullError("Queue is full");
       }
 
+      if (this.options.getHTML) {
+        const getHTML = this.options.getHTML;
+        return this.queue.add(() => getHTML(url), { throwOnTimeout: true });
+      }
+
       response = await this.queue.add(() => fetch(url, init), { throwOnTimeout: true });
     } else {
+      if (this.options.getHTML) {
+        return this.options.getHTML(url);
+      }
+
       response = await fetch(url, init);
     }
 
