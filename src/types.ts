@@ -2,10 +2,12 @@ import type { AnyNode, Cheerio, CheerioAPI } from "cheerio";
 import { Schema } from "./schema.js";
 import type { ParsedSelector } from "./selector.js";
 
-export interface TypeMapping {
+export interface FilterTypeMap {
   number: number;
-  number_human: number;
+  bool: boolean;
+  boolean: boolean;
   date: Date;
+  json: any;
 }
 
 /**
@@ -22,14 +24,23 @@ export type SchemaResolverFunc = (
  * Get the return type of a selector
  * @example "number | null" from ".selector | number | optional"
  */
-export type SelectorType<T> = T extends `${infer Before}, ${infer After}`
-  ? SelectorType<Before> | SelectorType<After>
-  : T extends `${infer BeforeOptional} | optional`
-  ? SelectorType<BeforeOptional> | null
-  : T extends `${string} | ${infer X extends keyof TypeMapping}`
-  ? TypeMapping[X]
-  : T extends `${infer K} | ${infer X}`
-  ? SelectorType<K> | X
+export type SelectorType<Selector> =
+  // parse multiple selectors "one, two"
+  Selector extends `${infer Before}, ${infer After}`
+    ? SelectorType<Before> | SelectorType<After>
+    : // parse optional selector "selector | optional"
+    Selector extends `${infer BeforeOptional} | optional`
+    ? SelectorType<BeforeOptional> | null
+    : // parse filter "selector | filter"
+    Selector extends `${string} | ${infer FilterName}`
+    ? RecursiveFilterType<FilterName>
+    : // and thats all folks
+      string;
+
+type RecursiveFilterType<FilterName> = FilterName extends keyof FilterTypeMap
+  ? FilterTypeMap[FilterName]
+  : FilterName extends `${string} | ${infer FilterName}`
+  ? RecursiveFilterType<FilterName>
   : string;
 
 export type SchemaLike = {
