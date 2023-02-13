@@ -60,7 +60,7 @@ export type ToSchemaResult<T extends SchemaLike> = {
     : T[K] extends readonly [string, infer U extends SchemaResolverFunc]
     ? ReturnType<U>
     : T[K] extends readonly [string]
-    ? SelectorType<T[K][0]>
+    ? SelectorType<T[K][0]>[]
     : T[K] extends SchemaLike
     ? ToSchemaResult<T[K]>
     : T[K] extends SchemaResolverFunc
