@@ -1,5 +1,18 @@
 {
-  "include": ["src", "types"],
+  "include": [
+    "src",
+    "types",
+    "src/transforms/boolean.ts",
+    "src/transforms/case.ts",
+    "src/transforms/date.ts",
+    "filters/index.ts",
+    "src/transforms/json.ts",
+    "src/transforms/markdown.ts",
+    "src/transforms/number.ts",
+    "src/transforms/split.ts",
+    "src/transforms/trim.ts",
+    "src/transforms/value.ts"
+  ],
   "compilerOptions": {
     // https://www.npmjs.com/package/@tsconfig/node16
     // https://github.com/sindresorhus/tsconfig/blob/main/tsconfig.json
@@ -23,10 +36,11 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "outDir": "dist",
+    "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": false,
     "strictPropertyInitialization": false,
     "lib": ["es2021", "dom"],
     "baseUrl": ".",
-    "types": ["vitest/importMeta"],
+    "types": ["vitest/importMeta"]
   }
 }

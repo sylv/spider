@@ -1,9 +1,5 @@
 import type { AnyNode, Cheerio, CheerioAPI } from "cheerio";
-import { runFilters } from "./filters/index.js";
-import { MissingValueError } from "./index.js";
-import type { SchemaLike, SchemaResolverFunc, ToSchemaResult } from "./types.js";
-
-const PROTOCOL_REGEX = /^https?:|file:|data:/;
+import { UnknownAttrError } from "./errors/unknown-attr.error.js";
 
 export interface ParsedSelector {
   name: string;
@@ -39,129 +35,27 @@ export function* parseSelector(selector: string): Generator<ParsedSelector> {
   }
 }
 
-export const getSelectorValue = ($: CheerioAPI, selector: ParsedSelector, url?: string, parent?: AnyNode) => {
+export const getSelectorValue = ($: CheerioAPI, selector: ParsedSelector, parent?: AnyNode) => {
   const element = parent ? $(parent).find(selector.name) : $(selector.name);
-  const value = getAttribute(selector, element, url);
-
-  if (value === null) {
-    if (selector.filters.includes("optional")) return null;
-    throw new MissingValueError(
-      `Result of "${selector.name}" is an empty string. Did you mean to use the optional filter?`
-    );
-  }
-
-  return runFilters(value, selector);
+  const value = getAttribute(selector, element);
+  return value;
 };
 
-export const getAttribute = (selector: ParsedSelector, el: Cheerio<AnyNode>, url?: string) => {
+export const getAttribute = (selector: ParsedSelector, el: Cheerio<AnyNode>) => {
   if (el.length === 0) return null;
   if (selector.attrName) {
-    let attr = el.attr(selector.attrName);
-    if (attr) {
-      if (url && (selector.attrName === "href" || selector.attrName === "src") && !PROTOCOL_REGEX.test(attr)) {
-        // normalize relative urls
-        attr = new URL(attr, url).href;
-      }
-
-      return attr;
+    if (selector.attrName === "innerHTML") {
+      const html = el.html();
+      if (html) return html;
     }
+
+    const attr = el.attr(selector.attrName);
+    if (attr) return attr;
+
+    throw new UnknownAttrError(`Attribute "${selector.attrName}" not found on element "${selector.name}"`);
   }
 
   const text = el.text();
   if (text === "") return null;
   return text;
 };
-
-export const parseSchema = <T extends SchemaLike>(
-  $: CheerioAPI,
-  schema: T,
-  url?: string,
-  parent?: AnyNode
-): ToSchemaResult<T> => {
-  const result: Record<string, any> = {};
-  for (const [key, value] of Object.entries(schema)) {
-    if (typeof value === "string") {
-      for (const selector of parseSelector(value)) {
-        const parsed = getSelectorValue($, selector, url, parent);
-        result[key] = parsed;
-        break;
-      }
-    } else if (Array.isArray(value)) {
-      const [rawSelector, childSchema] = value as [string, SchemaLike | SchemaResolverFunc | undefined];
-      for (const selector of parseSelector(rawSelector)) {
-        const items = [];
-        // const throwIfMissing =
-
-        if (!childSchema) {
-          for (const el of $(selector.name)) {
-            const text = getAttribute(selector, $(el), url);
-            if (text !== null) {
-              const filtered = runFilters(text, selector);
-              items.push(filtered);
-            }
-          }
-        } else {
-          const [selector, ...siblings] = rawSelector.split(/ ~ /g);
-          for (let el of $(selector)) {
-            if (siblings[0]) {
-              // lets you iterate a zip of two selectors, e.g. "tr.thing ~ tr" which will iterate:
-              // <tr class="thing" />
-              // <tr />
-              // as a single item using a fake parent element
-              const sibling = $(el).next(siblings[0]);
-              if (sibling.length) {
-                // create a fake span element to wrap the two elements
-                el = $("<spider_wrapper />").append(el).append(sibling).get(0)!;
-              }
-            }
-
-            if (typeof childSchema === "function") {
-              const result = childSchema($, $(el), { url });
-              if (Array.isArray(result)) {
-                items.push(...result);
-              } else {
-                items.push(result);
-              }
-            } else {
-              const result = parseSchema($, childSchema, url, el);
-              items.push(result);
-            }
-          }
-        }
-
-        if (items.length) {
-          result[key] = items;
-          break;
-        }
-      }
-
-      if (!result[key]) {
-        result[key] = [];
-      }
-    } else if (typeof value === "object") {
-      const parsed = parseSchema($, value as SchemaLike, url, parent);
-      result[key] = parsed;
-    } else if (typeof value === "function") {
-      const el = parent ?? $.root();
-      result[key] = value($, el, {
-        url,
-      });
-    }
-  }
-
-  return result as any;
-};
-
-if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
-  it("should parse multiple selectors", async () => {
-    const values = [];
-    for await (const value of parseSelector(
-      "a:contains(comment)@href | optional, a:contains(discuss)@href | optional"
-    )) {
-      values.push(value);
-    }
-
-    expect(values).toMatchSnapshot();
-  });
-}

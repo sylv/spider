@@ -1,6 +1,6 @@
-export * from "./types.js";
-export * from "./selector.js";
-export * from "./schema.js";
-export * from "./errors/missing-value.error.js";
-export * from "./errors/queue-full.error.js";
-export * from "./filters/index.js";
+import { Builder } from "./builder.js";
+import type { Infer, Selector } from "./types.js";
+
+export const s = <T extends Selector<any>>(selector: T) => new Builder<Infer<T>>(selector);
+
+export * from "./errors/index.js";

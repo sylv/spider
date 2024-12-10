@@ -1,11 +1,11 @@
-import type { Filter } from "src/schema.js";
+import type { Transformer } from "../transformer.js";
 
 const SPLIT_REGEX = /(\/|=|: )/g;
 
 // "rating: sfw" becomes "sfw"
 // "value=2.4" becomes "2.4"
 // "2.4/10" becomes "2.4"
-export const valueFilter: Filter<string> = (input) => {
+export const value: Transformer<string, string> = (input) => {
   const parts = input.split(SPLIT_REGEX);
   if (parts.length !== 3) {
     throw new Error(`Expected value-like string, got "${input}"`);
@@ -18,18 +18,18 @@ export const valueFilter: Filter<string> = (input) => {
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
   it("should return the value if the input is of the format 'rating: sfw'", () => {
-    expect(valueFilter("rating: sfw")).toEqual("sfw");
+    expect(value("rating: sfw")).toEqual("sfw");
   });
 
   it("should return the value if the input is of the format 'value=2.4'", () => {
-    expect(valueFilter("value=2.4")).toEqual("2.4");
+    expect(value("value=2.4")).toEqual("2.4");
   });
 
   it("should return the value if the input is of the format '2.4/10'", () => {
-    expect(valueFilter("2.4/10")).toEqual("2.4");
+    expect(value("2.4/10")).toEqual("2.4");
   });
 
   it("should throw an error if the input does not match the expected format", () => {
-    expect(() => valueFilter("not a value")).toThrowErrorMatchingSnapshot();
+    expect(() => value("not a value")).toThrowErrorMatchingSnapshot();
   });
 }
