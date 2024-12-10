@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should parse valid date strings 1`] = `2022-01-01T04:00:00.000Z`;
 

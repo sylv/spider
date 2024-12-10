@@ -1,3 +1,3 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`should throw an error if the input does not match the expected format 1`] = `"Expected value-like string, got \\"not a value\\""`;
+exports[`should throw an error if the input does not match the expected format 1`] = `[Error: Expected value-like string, got "not a value"]`;

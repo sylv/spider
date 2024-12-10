@@ -20,7 +20,6 @@
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": true,
     "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
     "skipLibCheck": true,
     "isolatedModules": true,
     "outDir": "dist",
@@ -29,8 +28,5 @@
     "lib": ["es2021", "dom"],
     "baseUrl": ".",
     "types": ["vitest/importMeta"],
-    "paths": {
-      "compromise": ["node_modules/compromise/types/three.d.ts"]
-    }
   }
 }

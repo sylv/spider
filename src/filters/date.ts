@@ -1,13 +1,13 @@
 import type { Filter } from "src/schema.js";
-import * as chrono from "chrono-node";
+import { parseAbsoluteDate } from "@atlasbot/parsers";
 
 export const dateFilter: Filter<Date> = (input) => {
-  const date = chrono.parseDate(input, undefined);
-  if (isNaN(date.getTime())) {
-    throw new Error(`Expected date-like string, got "${input}"`);
+  const result = parseAbsoluteDate(input)
+  if (!result) {
+    throw new Error(`Expected a date string, got "${input}"`)
   }
 
-  return date;
+  return result;
 };
 
 if (import.meta.vitest) {

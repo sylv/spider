@@ -8,6 +8,7 @@ import { numberFilter } from "./number.js";
 import { splitFilter } from "./split.js";
 import { trimFilter } from "./trim.js";
 import { valueFilter } from "./value.js";
+import { markdownFilter } from "./markdown.js";
 
 export {
   boolFilter,
@@ -29,6 +30,7 @@ const filters = new Map<string, Filter>([
   ["boolean", boolFilter],
   ["date", dateFilter],
   ["trim", trimFilter],
+  ["markdown", markdownFilter],
 
   ["split", splitFilter],
   ["array", splitFilter],
@@ -47,6 +49,7 @@ const filters = new Map<string, Filter>([
 
   ["json", jsonFilter],
   ["value", valueFilter],
+
 ]);
 
 export const registerFilter = (name: string, filter: Filter) => {
