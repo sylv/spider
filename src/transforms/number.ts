@@ -42,4 +42,8 @@ if (import.meta.vitest) {
     expect(number("123b")).toBe(123000000000);
     expect(number("123 comments")).toBe(123);
   });
+
+  it('should parse numbers with prefixes', () => {
+    expect(number("x0.32")).toBe(0.32);
+  })
 }

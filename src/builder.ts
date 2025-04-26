@@ -84,7 +84,7 @@ export class Builder<Result> {
     if (typeof this.selector === "string") {
       for (const selector of parseSelector(this.selector)) {
         const result = getSelectorValue($, selector, parent);
-        if (result === null) {
+        if (result === null || result.trim() === "") {
           if (this.isOptional) return null as Result;
           throw new MissingValueError(
             `Result of "${selector.name}" is an empty string. Did you mean to use ".optional()"?`,
