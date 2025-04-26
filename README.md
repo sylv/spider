@@ -27,7 +27,7 @@ const schema = s({
       // parse a date
       createdAt: s("span.age@title").date(),
       // a comma-separated list of selectors, the first one that matches will be used
-      commentsUrl: s("a:contains(comment)@href | optional, a:contains(discuss)@href").optional(),
+      commentsUrl: s("a:contains(comment)@href, a:contains(discuss)@href").optional(),
       // nested objects where all fields are empty will be replaced with "null",
       // so for posts with no author this will simply be "author: null"
       author: s({
@@ -86,6 +86,10 @@ const mySchema = s({
 
 ## todo
 
+- Zod-based validation
+  - We have a lot of utilities that mimic zod types (eg, `.min()`), it would make more sense to integrate with zod directly.
+  - For example, transform a value directly into an enum with `.nativeEnum(Enum)`
+  - Not sure how to do this because we would have to proxy the schema object to zod? Maybe just that, proxy the schema object and maintain an internal schema that is checked.
 - Generate a schema by having the user pick out some values from a page, then grabbing the HTML and generating selectors for the values.
   - Could be nice for small scripts and quickly getting started.
   - Allow multiple examples as tests to make sure the generated selectors are correct

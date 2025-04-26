@@ -25,6 +25,54 @@ export class Builder<Result> {
     return this as unknown as Builder<Output>;
   }
 
+  min(this: Builder<string | any[]>, min: number) {
+    return this.transform((value) => {
+      if (value.length < min) {
+        throw new Error(`Array length is less than ${min}`);
+      }
+      return value;
+    });
+  }
+
+  max(this: Builder<string | any[]>, max: number) {
+    return this.transform((value) => {
+      if (value.length > max) {
+        throw new Error(`Array length is greater than ${max}`);
+      }
+
+      return value;
+    });
+  }
+
+  /**
+   * Replace all instances of a string with another string.
+   * @example
+   * "hello world".replace("hello", "hi") // "hi world"
+   * "hello world".replace("world", "everyone") // "hello everyone"
+   */
+  replace(this: Builder<string>, search: string, replacement: string) {
+    return this.transform((value) => {
+      return value.replace(search, replacement);
+    });
+  }
+
+  /**
+   * Case-insensitive replacement of the search string with the replacement string.
+   * @example
+   * "hello world".replace("hello", null) // "hello world"
+   * "hello world".replace("hello world", null) // null
+   * "None".replace("none", null) // null
+   */
+  swap(this: Builder<string>, search: string, replacement: string | null) {
+    return this.transform((value) => {
+      if (value.trim().toLowerCase() == search.toLowerCase()) {
+        return replacement;
+      }
+
+      return value;
+    });
+  }
+
   boolean(this: Builder<string>) {
     return this.transform(transformers.boolean);
   }
