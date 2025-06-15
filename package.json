@@ -1,6 +1,6 @@
 {
   "name": "@ryanke/spider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Ryan <ryan@sylver.me>",
   "type": "module",
   "license": "MIT",
@@ -19,33 +19,28 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./transformers": "./dist/transformers/index.js",
-    "./transformers/boolean": "./dist/transformers/boolean.js",
-    "./transformers/case": "./dist/transformers/case.js",
-    "./transformers/date": "./dist/transformers/date.js",
-    "./transformers/json": "./dist/transformers/json.js",
-    "./transformers/markdown": "./dist/transformers/markdown.js",
-    "./transformers/number": "./dist/transformers/number.js",
-    "./transformers/split": "./dist/transformers/split.js",
-    "./transformers/trim": "./dist/transformers/trim.js",
-    "./transformers/value": "./dist/transformers/value.js"
+    "./transformers": "./dist/transformers/index.js"
   },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "prepack": "pnpm run build"
   },
+  "dependencies": {
+    "cheerio": "^1.1.0"
+  },
   "devDependencies": {
     "@atlasbot/configs": "^10.6.3",
-    "@atlasbot/parsers": "^10.5.21",
+    "@atlasbot/parsers": "^10.5.22",
     "@biomejs/biome": "^1.9.4",
     "camel-case": "^5.0.0",
-    "cheerio": "1.0.0-rc.12",
+    "domhandler": "^5.0.3",
     "node-html-markdown": "^1.3.0",
     "title-case": "^4.3.2",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "ts-enum-util": "^4.1.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
   },
   "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }

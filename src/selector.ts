@@ -1,4 +1,5 @@
-import type { AnyNode, Cheerio, CheerioAPI } from "cheerio";
+import type { Cheerio, CheerioAPI } from "cheerio";
+import type { AnyNode } from 'domhandler';
 import { UnknownAttrError } from "./errors/unknown-attr.error.js";
 
 export interface ParsedSelector {

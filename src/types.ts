@@ -1,4 +1,5 @@
-import type { AnyNode, CheerioAPI } from "cheerio";
+import type { CheerioAPI } from "cheerio";
+import type { AnyNode } from 'domhandler';
 import { Builder } from "./builder.js";
 import type { ParsedSelector } from "./selector.js";
 
