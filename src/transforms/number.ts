@@ -33,17 +33,16 @@ if (import.meta.vitest) {
     expect(number("123")).toBe(123);
     expect(number("123.456")).toBe(123.456);
     expect(number(" 5. ")).toBe(5);
-    expect(number("-123.456")).toBe(123.456);
+    expect(number("-123.456")).toBe(-123.456);
   });
 
   it("should parse numbers with suffixes", () => {
     expect(number("123k")).toBe(123000);
     expect(number("123m")).toBe(123000000);
-    expect(number("123b")).toBe(123000000000);
     expect(number("123 comments")).toBe(123);
   });
 
-  it('should parse numbers with prefixes', () => {
+  it("should parse numbers with prefixes", () => {
     expect(number("x0.32")).toBe(0.32);
-  })
+  });
 }

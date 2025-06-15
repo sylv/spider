@@ -14,7 +14,7 @@ if (import.meta.vitest) {
     const json1 = JSON.stringify({ a: 1, b: "c" });
     expect(json(json1)).toEqual({ a: 1, b: "c" });
 
-    const json2 = JSON.stringify([1, 2, 3]);
+    const json2 = JSON.stringify([1, 2, 3], null, 2);
     expect(json(json2)).toEqual([1, 2, 3]);
   });
 

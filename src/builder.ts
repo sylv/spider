@@ -1,4 +1,6 @@
-import { type AnyNode, type CheerioAPI, load } from "cheerio";
+import { type CheerioAPI, load } from "cheerio";
+import type { AnyNode } from "domhandler";
+import type { StringKeyOf } from "ts-enum-util/dist/types/types.js";
 import { MissingValueError } from "./errors/missing-value.error.js";
 import { NoSelectorMatchError } from "./errors/no-match.error.js";
 import { getSelectorValue, parseSelector } from "./selector.js";
@@ -56,21 +58,8 @@ export class Builder<Result> {
     });
   }
 
-  /**
-   * Case-insensitive replacement of the search string with the replacement string.
-   * @example
-   * "hello world".replace("hello", null) // "hello world"
-   * "hello world".replace("hello world", null) // null
-   * "None".replace("none", null) // null
-   */
-  swap(this: Builder<string>, search: string, replacement: string | null) {
-    return this.transform((value) => {
-      if (value.trim().toLowerCase() == search.toLowerCase()) {
-        return replacement;
-      }
-
-      return value;
-    });
+  enum<T extends Record<StringKeyOf<T>, number | string>>(this: Builder<string>, enumValues: T) {
+    return this.transform(transformers.nativeEnum(enumValues));
   }
 
   boolean(this: Builder<string>) {
