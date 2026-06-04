@@ -37,7 +37,9 @@ export function* parseSelector(selector: string): Generator<ParsedSelector> {
 }
 
 export const getSelectorValue = ($: CheerioAPI, selector: ParsedSelector, parent?: AnyNode) => {
-  const element = parent ? $(parent).find(selector.name) : $(selector.name);
+  const element = parent
+    ? selector.name ? $(parent).find(selector.name) : $(parent)
+    : $(selector.name);
   const value = getAttribute(selector, element);
   return value;
 };

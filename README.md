@@ -10,7 +10,8 @@ Inspired by [x-ray](https://github.com/matthewmueller/x-ray#readme).
 // schemas takes HTML and spits out a structured object with type information built in.
 const schema = s({
   posts: s([
-    // include the "tr" immediately after the ".athing" element
+    // include the "tr" immediately after the ".athing" element,
+    // then apply the following schema to each and format the results into an array.
     "tr.athing ~ tr.athing+tr",
     s({
       title: s(".titleline > a"),

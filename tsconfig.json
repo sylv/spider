@@ -36,11 +36,17 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "outDir": "dist",
+    "rootDir": "src",
     "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": false,
     "strictPropertyInitialization": false,
-    "lib": ["es2021", "dom"],
-    "baseUrl": ".",
-    "types": ["vitest/importMeta"]
+    "ignoreDeprecations": "6.0",
+    "lib": [
+      "es2021",
+      "dom"
+    ],
+    "types": [
+      "vitest/importMeta"
+    ]
   }
 }

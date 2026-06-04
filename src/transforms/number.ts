@@ -1,7 +1,7 @@
 import { parseNumber } from "@atlasbot/parsers";
 import type { Transformer } from "../transformer.js";
 
-const LAX_NUMBER_PATTERN = /(\d{1,3})(,\d{3})*(\.\d+)?/g;
+const LAX_NUMBER_PATTERN = /\d+(,\d{3})*(\.\d+)?/g;
 const LAX_NUMBER_REPLACE_PATTERN = /,/g;
 
 export const number: Transformer<string, number> = (input) => {
@@ -10,6 +10,7 @@ export const number: Transformer<string, number> = (input) => {
     // fallback parsing for some weirder cases that the parser can't handle by default
     // mostly things like "123 comments", we grab all matches to try reduce the chance of users grabbing the wrong number
     // worse case scenario they can add a custom transformer
+    // this also works around parseNumber() not handling very large numbers
     const laxMatch = input.matchAll(LAX_NUMBER_PATTERN);
     const laxMatches = Array.from(laxMatch);
     if (laxMatches[0]) {
@@ -18,10 +19,19 @@ export const number: Transformer<string, number> = (input) => {
       }
 
       const replaced = laxMatches[0][0].replace(LAX_NUMBER_REPLACE_PATTERN, "");
-      return +replaced;
+      const int = +replaced;
+      if (int > Number.MAX_SAFE_INTEGER) {
+        throw new Error(`Parsed number "${int}" from "${input}" is too large to be represented safely in JavaScript`);
+      }
+
+      return int;
     }
 
     throw new Error(`Expected a number, got "${input}"`);
+  }
+
+  if (result > Number.MAX_SAFE_INTEGER) {
+    throw new Error(`Parsed number "${result}" from "${input}" is too large to be represented safely in JavaScript`);
   }
 
   return result;
@@ -44,5 +54,14 @@ if (import.meta.vitest) {
 
   it("should parse numbers with prefixes", () => {
     expect(number("x0.32")).toBe(0.32);
+  });
+
+  it('should parse very large numbers', () => {
+    expect(number("1,234,567")).toBe(1234567);
+    expect(number("895717237857")).toBe(895717237857);
+  })
+
+  it('should fail for numbers larger than MAX_SAFE_INTEGER', () => {
+    expect(() => number("9007199254740992")).toThrow();
   });
 }

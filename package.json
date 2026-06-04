@@ -1,6 +1,6 @@
 {
   "name": "@ryanke/spider",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Ryan <ryan@sylver.me>",
   "type": "module",
   "license": "MIT",
@@ -27,20 +27,20 @@
     "prepack": "pnpm run build"
   },
   "dependencies": {
-    "cheerio": "^1.1.0"
+    "cheerio": "^1.2.0"
   },
   "devDependencies": {
     "@atlasbot/configs": "^10.6.3",
-    "@atlasbot/parsers": "^10.5.22",
+    "@atlasbot/parsers": "^10.5.23",
     "@biomejs/biome": "^1.9.4",
     "camel-case": "^5.0.0",
-    "domhandler": "^5.0.3",
-    "node-html-markdown": "^1.3.0",
+    "domhandler": "^6.0.1",
+    "node-html-markdown": "^2.0.0",
     "title-case": "^4.3.2",
     "ts-enum-util": "^4.1.0",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.3"
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
   },
   "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }

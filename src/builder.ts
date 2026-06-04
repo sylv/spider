@@ -3,7 +3,7 @@ import type { AnyNode } from "domhandler";
 import type { StringKeyOf } from "ts-enum-util/dist/types/types.js";
 import { MissingValueError } from "./errors/missing-value.error.js";
 import { NoSelectorMatchError } from "./errors/no-match.error.js";
-import { getSelectorValue, parseSelector } from "./selector.js";
+import { getAttribute, getSelectorValue, parseSelector } from "./selector.js";
 import type { Transformer } from "./transformer.js";
 import { transformers } from "./transforms/index.js";
 import type { Selector } from "./types.js";
@@ -141,6 +141,17 @@ export class Builder<Result> {
     if (Array.isArray(this.selector)) {
       const [rawSelector, childSchema] = this.selector;
       const items = [];
+
+      if (!childSchema) {
+        // Flat array shortcut: s(['selector@attr']) → string[]
+        const [parsedSel] = [...parseSelector(rawSelector)];
+        for (const el of $(parsedSel.name)) {
+          const value = getAttribute(parsedSel, $(el));
+          if (value !== null && value !== "") items.push(value);
+        }
+        return this.runTransformers(items) as Result;
+      }
+
       const [selector, ...siblings] = rawSelector.split(/ ~ /g);
       for (let el of $(selector)) {
         if (siblings[0]) {
